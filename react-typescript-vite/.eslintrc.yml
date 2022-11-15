@@ -1,0 +1,97 @@
+env:
+  browser: true
+  es2021: true
+extends:
+  - plugin:react/recommended
+  - airbnb
+  - airbnb-typescript
+parser: '@typescript-eslint/parser'
+parserOptions:
+  ecmaFeatures:
+    jsx: true
+  ecmaVersion: latest
+  sourceType: module
+  # change according to your own needs
+  project: './tsconfig.json'
+
+plugins:
+  - react
+  - '@typescript-eslint'
+
+rules:
+  # the below 2 rules are provided as according to official recommendation:
+  #   refer: https://github.com/typescript-eslint/typescript-eslint/blob/main/packages/eslint-plugin/docs/rules/no-use-before-define.md#how-to-use
+  no-use-before-define: off
+  '@typescript-eslint/no-use-before-define':
+    - error
+
+  # do not require tsx as an extension since vite recognizes it
+  import/extensions:
+    - error
+    - ignorePackages
+    - tsx: never
+      ts: never
+
+  # allow both tsx and jsx
+  react/jsx-filename-extension:
+    - error
+    - extensions:
+      - .tsx
+      - .jsx
+
+  # do not require import React in every jsx/tsx since vite does it for us
+  react/react-in-jsx-scope: off
+
+  # allow vite.config.ts use vite-related dev dependencies
+  import/no-extraneous-dependencies:
+    - error
+    - devDependencies:
+      - 'vite.config.ts'
+
+  # multiple props stay on different lines to improve readability
+  react/jsx-max-props-per-line:
+    - error
+    - maximum: 1
+
+  # component file name should be in pascal case
+  react/jsx-pascal-case:
+    - error
+
+  # no need to provide captions for media
+  jsx-a11y/media-has-caption: off
+
+  #### FORMATTING SECTION ####
+  #
+  # Below rules are for not-so-adept programmers who found following a
+  # clear sytle difficult.
+  #
+  # There is some controversies about how formatting should be handled. For a
+  # beginner, he/she may find configuring a formatter equally hard. This is
+  # when this section comes into play.
+  #
+  '@typescript-eslint/type-annotation-spacing':
+    - error
+
+  padding-line-between-statements:
+    - error
+    - blankLine: always
+      prev:
+        - function
+        - export
+      next: '*'
+    - blankLine: always
+      prev:
+        - '*'
+      next: return
+
+  #### FORMATTING SECTION ENDS ####
+
+settings:
+  import/resolver:
+    # force eslint to load <current-folder>/tsconfig.json
+    typescript: {}
+
+ignorePatterns:
+  - 'dist/*'
+  # vite is fast 😎 and deserves an exception
+  - 'vite.config.ts'
